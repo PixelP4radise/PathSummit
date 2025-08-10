@@ -1,3 +1,8 @@
+use crate::configuration::get_configuration;
+
+mod configuration;
+
 fn main() {
-    println!("Hello, world!");
+    let graphSettings = get_configuration("test_files/test.txt");
+    
 }
