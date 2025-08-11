@@ -12,8 +12,8 @@ struct Solution {
 }
 
 enum SolutionType {
-    V1,
-    V2
+    RandomV1,
+    RandomV2
 }
 
 impl Solution {
@@ -40,12 +40,12 @@ impl Solution {
 
     fn new_solution(&self, solution_type: SolutionType) -> Self {
         match solution_type {
-            SolutionType::V1 => {self.new_v1()}
-            SolutionType::V2 => {self.new_v2()}
+            SolutionType::RandomV1 => {self.random_v1()}
+            SolutionType::RandomV2 => {self.random_v2()}
         }
     }
 
-    fn new_v1(&self) -> Self {
+    fn random_v1(&self) -> Self {
         let mut rng = rand::rng();
         let size = self.selection_mask.len();
 
@@ -69,7 +69,7 @@ impl Solution {
         new_sol
     }
 
-    fn new_v2(&self) -> Self {
+    fn random_v2(&self) -> Self {
         let mut rng = rand::rng();
         let size = self.selection_mask.len();
 
