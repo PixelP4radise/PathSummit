@@ -24,7 +24,7 @@ impl Solution {
         }
     }
 
-    fn init_solution(&mut self, subgroup_vert_num: u8) {
+    fn generate_solution(&mut self, subgroup_vert_num: u8) {
         let mut rng = rand::rng();
         let size = self.selection_mask.len();
 
