@@ -1,4 +1,5 @@
 use rand::Rng;
+use crate::configuration::Graph;
 use crate::solution::Cost::Invalid;
 #[derive(Clone)]
 enum Cost {
@@ -101,5 +102,30 @@ impl Solution {
         new_sol.selection_mask[pos_false_2] = true;
 
         new_sol
+    }
+
+    fn is_valid(&self, graph: &Graph) -> bool {
+            let size = self.selection_mask.len();
+
+        for v in 0..size {
+            if self.selection_mask[v] {
+                let mut has_connection = false;
+
+                for u in 0..size {
+                    if v!=u && self.selection_mask[u]{
+                        if let Some(_) = graph.get_cost(v as u16 + 1, u as u16 + 1){
+                            has_connection = true;
+                            break;
+                        }
+                    }
+                }
+
+                if !has_connection {
+                    return false;
+                }
+            }
+        }
+
+        true
     }
 }

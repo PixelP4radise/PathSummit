@@ -55,7 +55,7 @@ pub fn get_configuration(path: &str) -> GraphSettings {
 type Vertex = u16;
 type Cost = u16;
 
-struct Graph {
+pub struct Graph {
     edges_cost: HashMap<(Vertex, Vertex), Cost>,
 }
 
@@ -68,7 +68,7 @@ impl Graph{
         self.edges_cost.insert(Self::key(a,b), cost);
     }
 
-    fn get_cost(&self, a:Vertex, b:Vertex) -> Option<&Cost> {
+    pub fn get_cost(&self, a:Vertex, b:Vertex) -> Option<&Cost> {
         self.edges_cost.get(&Self::key(a,b))
     }
 }
