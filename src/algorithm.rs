@@ -13,9 +13,10 @@ impl Algorithm {
         initial_solution: &Solution,
         edges_cost: Arc<Graph>,
         iterations: usize,
+        accept_invalids: bool
     ) -> Solution {
         match self {
-            Algorithm::HillClimbing => self.hill_climber(initial_solution, edges_cost, iterations),
+            Algorithm::HillClimbing => self.hill_climber(initial_solution, edges_cost, iterations, accept_invalids),
         }
     }
 
@@ -23,7 +24,7 @@ impl Algorithm {
         &self,
         initial_solution: &Solution,
         edges_cost: Arc<Graph>,
-        iterations: usize,
+        iterations: usize,accept_invalids: bool
     ) -> Solution {
         let (tx, rx) = mpsc::channel();
 
@@ -50,9 +51,19 @@ impl Algorithm {
 
                 let mut neighbor = best_solution.new_solution(SolutionType::RandomV2);
 
+                loop {
+                    neighbor.calculate_cost(&edges_cost);
+
+                    if !accept_invalids && !neighbor.is_valid(&edges_cost) {
+                        neighbor = best_solution.new_solution(SolutionType::RandomV2);
+                    } else {
+                        break;
+                    }
+                }
+
                 drop(best_solution);
 
-                neighbor.calculate_cost(&edges_cost);
+
 
                 thread_tx.send(neighbor).unwrap();
             });

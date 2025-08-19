@@ -9,27 +9,29 @@ mod algorithm;
 mod configuration;
 mod solution;
 
-//lancar threads para cada run
-//lancar threads para gerar solucoes para o trepa colinas
-//meter uma best solution e po-la dentro de um rwLock para poder ser lida no final da execucao das iteracoes
-
 fn main() {
-    let graphSettings = get_configuration("test_files/test.txt");
+    let graph_settings = get_configuration("test_files/file5.txt");
 
     let (tx, rx) = mpsc::channel();
 
     for _ in 0..10 {
         let thread_tx: Sender<Solution> = tx.clone();
-        let edges_cost = graphSettings.edges_cost.clone();
+        let edges_cost = graph_settings.edges_cost.clone();
 
         thread::spawn(move || {
-            let mut initial_solution = Solution::new(graphSettings.num_vert as usize);
+            let mut initial_solution = Solution::new(graph_settings.num_vert as usize);
 
-            initial_solution.generate_initial_solution(graphSettings.subgroup_vert_num);
-            initial_solution.calculate_cost(&edges_cost);
+            loop {
+                initial_solution.generate_initial_solution(graph_settings.subgroup_vert_num);
+                initial_solution.calculate_cost(&edges_cost);
+
+                if initial_solution.is_valid(&edges_cost) {
+                    break;
+                }
+            }
 
             let best_solution: Solution =
-                Algorithm::HillClimbing.run(&initial_solution, edges_cost, 50000);
+                Algorithm::HillClimbing.run(&initial_solution, edges_cost, 1000000, false);
 
             thread_tx.send(best_solution).unwrap();
         });
@@ -37,13 +39,13 @@ fn main() {
 
     drop(tx);
 
-    let mut best_solution = Solution::new(graphSettings.num_vert as usize);
-    best_solution.generate_initial_solution(graphSettings.subgroup_vert_num);
-    best_solution.calculate_cost(&graphSettings.edges_cost);
+    let mut best_solution = Solution::new(graph_settings.num_vert as usize);
+    best_solution.generate_initial_solution(graph_settings.subgroup_vert_num);
+    best_solution.calculate_cost(&graph_settings.edges_cost);
 
-    for solution in rx {
-        if solution.is_better_than(&best_solution) {
-            best_solution = solution;
+    for new_solution in rx {
+        if new_solution.is_better_than(&best_solution) {
+            best_solution = new_solution;
         }
     }
 
