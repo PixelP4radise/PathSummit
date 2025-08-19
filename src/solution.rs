@@ -80,7 +80,7 @@ impl Solution {
         }
 
         let mut pos_true_2 = rng.random_range(0..size);
-        while !self.selection_mask[pos_true_2] {
+        while !self.selection_mask[pos_true_2] || pos_true_2 == pos_true_1 {
             pos_true_2 = rng.random_range(0..size);
         }
 
@@ -90,7 +90,7 @@ impl Solution {
         }
 
         let mut pos_false_2 = rng.random_range(0..size);
-        while self.selection_mask[pos_false_2] {
+        while self.selection_mask[pos_false_2] || pos_false_2 == pos_false_1 {
             pos_false_2 = rng.random_range(0..size);
         }
 
