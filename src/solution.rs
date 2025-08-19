@@ -112,12 +112,13 @@ impl Solution {
                 let mut has_connection = false;
 
                 for u in 0..size {
-                    if v != u && self.selection_mask[u]
-                        && graph.get_cost(v as u16 + 1, u as u16 + 1).is_some() {
-                            has_connection = true;
-                            break;
-                        }
-
+                    if v != u
+                        && self.selection_mask[u]
+                        && graph.get_cost(v as u16 + 1, u as u16 + 1).is_some()
+                    {
+                        has_connection = true;
+                        break;
+                    }
                 }
 
                 if !has_connection {
@@ -135,7 +136,6 @@ impl Solution {
             return;
         }
 
-
         let mut total: u16 = 0;
         let size = self.selection_mask.len();
 
@@ -143,10 +143,10 @@ impl Solution {
             if self.selection_mask[i] {
                 for j in (i + 1)..size {
                     if self.selection_mask[j]
-                        && let Some(cost) = graph.get_cost(i as u16 + 1, j as u16 + 1) {
-                            total += *cost;
-                        }
-
+                        && let Some(cost) = graph.get_cost(i as u16 + 1, j as u16 + 1)
+                    {
+                        total += *cost;
+                    }
                 }
             }
         }

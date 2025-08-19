@@ -13,10 +13,12 @@ impl Algorithm {
         initial_solution: &Solution,
         edges_cost: Arc<Graph>,
         iterations: usize,
-        accept_invalids: bool
+        accept_invalids: bool,
     ) -> Solution {
         match self {
-            Algorithm::HillClimbing => self.hill_climber(initial_solution, edges_cost, iterations, accept_invalids),
+            Algorithm::HillClimbing => {
+                self.hill_climber(initial_solution, edges_cost, iterations, accept_invalids)
+            }
         }
     }
 
@@ -24,14 +26,15 @@ impl Algorithm {
         &self,
         initial_solution: &Solution,
         edges_cost: Arc<Graph>,
-        iterations: usize,accept_invalids: bool
+        iterations: usize,
+        accept_invalids: bool,
     ) -> Solution {
         let (tx, rx) = mpsc::channel();
 
         let best_solution = Arc::new(RwLock::new(initial_solution.clone()));
         let iterations = Arc::new(Mutex::new(iterations));
 
-        for _ in 0..5 {
+        for _ in 0..2 {
             let iterations = iterations.clone();
             let best_solution = best_solution.clone();
             let thread_tx = tx.clone();
@@ -62,8 +65,6 @@ impl Algorithm {
                 }
 
                 drop(best_solution);
-
-
 
                 thread_tx.send(neighbor).unwrap();
             });
