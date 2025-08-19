@@ -104,7 +104,7 @@ impl Solution {
         new_sol
     }
 
-    fn is_valid(&self, graph: &Graph) -> bool {
+    pub fn is_valid(&self, graph: &Graph) -> bool {
         let size = self.selection_mask.len();
 
         for v in 0..size {
@@ -146,5 +146,13 @@ impl Solution {
         }
 
         self.cost = Cost::Valid(total);
+    }
+
+    pub fn is_better_than(&self, other: &Solution) -> bool {
+        match (&self.cost, &other.cost) {
+            (Cost::Valid(a), Cost::Valid(b)) => a < b,
+            (Cost::Valid(_), Cost::Invalid) => true,
+            (Invalid, _) => false,
+        }
     }
 }
