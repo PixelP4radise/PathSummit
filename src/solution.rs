@@ -2,14 +2,14 @@ use crate::configuration::Graph;
 use crate::solution::Cost::Invalid;
 use rand::Rng;
 #[derive(Clone)]
-enum Cost {
+pub enum Cost {
     Invalid,
     Valid(u16),
 }
 #[derive(Clone)]
 pub struct Solution {
     selection_mask: Vec<bool>,
-    cost: Cost,
+    pub cost: Cost,
 }
 
 pub enum SolutionType {
