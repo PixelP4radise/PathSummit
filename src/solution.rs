@@ -1,31 +1,31 @@
-use rand::Rng;
 use crate::configuration::Graph;
 use crate::solution::Cost::Invalid;
+use rand::Rng;
 #[derive(Clone)]
 enum Cost {
     Invalid,
-    Valid(u16)
+    Valid(u16),
 }
 #[derive(Clone)]
-struct Solution {
+pub struct Solution {
     selection_mask: Vec<bool>,
     cost: Cost,
 }
 
 enum SolutionType {
     RandomV1,
-    RandomV2
+    RandomV2,
 }
 
 impl Solution {
-    fn new(size: usize) -> Self {
-        Self{
+    pub fn new(size: usize) -> Self {
+        Self {
             cost: Invalid,
             selection_mask: vec![false; size],
         }
     }
 
-    fn generate_solution(&mut self, subgroup_vert_num: u8) {
+    pub fn generate_solution(&mut self, subgroup_vert_num: u8) {
         let mut rng = rand::rng();
         let size = self.selection_mask.len();
 
@@ -41,8 +41,8 @@ impl Solution {
 
     fn new_solution(&self, solution_type: SolutionType) -> Self {
         match solution_type {
-            SolutionType::RandomV1 => {self.random_v1()}
-            SolutionType::RandomV2 => {self.random_v2()}
+            SolutionType::RandomV1 => self.random_v1(),
+            SolutionType::RandomV2 => self.random_v2(),
         }
     }
 
@@ -105,15 +105,15 @@ impl Solution {
     }
 
     fn is_valid(&self, graph: &Graph) -> bool {
-            let size = self.selection_mask.len();
+        let size = self.selection_mask.len();
 
         for v in 0..size {
             if self.selection_mask[v] {
                 let mut has_connection = false;
 
                 for u in 0..size {
-                    if v!=u && self.selection_mask[u]{
-                        if let Some(_) = graph.get_cost(v as u16 + 1, u as u16 + 1){
+                    if v != u && self.selection_mask[u] {
+                        if let Some(_) = graph.get_cost(v as u16 + 1, u as u16 + 1) {
                             has_connection = true;
                             break;
                         }
