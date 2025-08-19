@@ -128,4 +128,23 @@ impl Solution {
 
         true
     }
+
+    pub fn calculate_cost(&mut self, graph: &Graph) {
+        let mut total: u16 = 0;
+        let size = self.selection_mask.len();
+
+        for i in 0..size {
+            if self.selection_mask[i] {
+                for j in (i + 1)..size {
+                    if self.selection_mask[j] {
+                        if let Some(cost) = graph.get_cost(i as u16 + 1, j as u16 + 1) {
+                            total += *cost;
+                        }
+                    }
+                }
+            }
+        }
+
+        self.cost = Cost::Valid(total);
+    }
 }
