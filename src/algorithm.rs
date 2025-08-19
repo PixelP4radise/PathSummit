@@ -63,7 +63,7 @@ impl Algorithm {
         for neighbor in rx {
             let mut best_solution = best_solution.write().unwrap();
 
-            if neighbor.is_better_than(&*best_solution) {
+            if neighbor.is_better_than(&best_solution) {
                 *best_solution = neighbor;
             }
             drop(best_solution);
