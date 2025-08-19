@@ -12,7 +12,7 @@ pub struct Solution {
     cost: Cost,
 }
 
-enum SolutionType {
+pub enum SolutionType {
     RandomV1,
     RandomV2,
 }
@@ -25,7 +25,7 @@ impl Solution {
         }
     }
 
-    pub fn generate_solution(&mut self, subgroup_vert_num: u8) {
+    pub fn generate_initial_solution(&mut self, subgroup_vert_num: u8) {
         let mut rng = rand::rng();
         let size = self.selection_mask.len();
 
@@ -39,7 +39,7 @@ impl Solution {
         }
     }
 
-    fn new_solution(&self, solution_type: SolutionType) -> Self {
+    pub fn new_solution(&self, solution_type: SolutionType) -> Self {
         match solution_type {
             SolutionType::RandomV1 => self.random_v1(),
             SolutionType::RandomV2 => self.random_v2(),

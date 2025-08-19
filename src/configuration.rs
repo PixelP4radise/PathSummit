@@ -1,12 +1,13 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::sync::Arc;
 
 pub struct GraphSettings {
     pub subgroup_vert_num: u8,
     pub num_vert: u16,
     pub num_edges: u16,
-    edges_cost: Graph,
+    pub edges_cost: Arc<Graph>,
 }
 
 pub fn get_configuration(path: &str) -> GraphSettings {
@@ -48,7 +49,7 @@ pub fn get_configuration(path: &str) -> GraphSettings {
         subgroup_vert_num,
         num_vert,
         num_edges,
-        edges_cost,
+        edges_cost: Arc::new(edges_cost),
     }
 }
 
