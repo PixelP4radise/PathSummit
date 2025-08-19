@@ -130,6 +130,12 @@ impl Solution {
     }
 
     pub fn calculate_cost(&mut self, graph: &Graph) {
+        if !self.is_valid(graph) {
+            self.cost = Invalid;
+            return;
+        }
+
+
         let mut total: u16 = 0;
         let size = self.selection_mask.len();
 
